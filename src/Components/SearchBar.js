@@ -5,12 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 function SearchBar(){
     const [input, setInput] = useState("");
-    const fetchData = (value) => {
-        fetch("https://jsonplaceholder.typicode.com/users")
-    }
     const handleChange = (value) => {
         setInput(value)
-        fetchData(value)
         console.log(typeof(input))
     }
     const navigate = useNavigate();

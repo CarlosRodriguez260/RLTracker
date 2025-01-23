@@ -6,6 +6,8 @@ export default function Tracker({epicName}) {
     const params = useParams()
 
     return(
-    <p>Your name is {params.epicName}</p>
+        <div className="Tracker">
+            <header>Stats for {params.epicName}</header>
+        </div>
     )
 }
