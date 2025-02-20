@@ -1,12 +1,12 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import requests
-import schedule
-import time
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from flask import Flask, jsonify, request
 from flask_cors import CORS  
 from selenium.webdriver.chrome.options import Options
-import os
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
@@ -15,66 +15,40 @@ CORS(app, origins=["http://localhost:3000"])
 def get_ranks():
     data = request.json
     url = data.get('url')
-    print(url)
     options = Options()
     options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(options=options)
-    driver.minimize_window()
+    # options.add_argument("--headless")
+    driver = webdriver.Chrome(options = options)
     driver.get(url)
-    time.sleep(7)
+
+    try:
+        # Wait for the table to be present in the DOM
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.TAG_NAME, "table"))
+        )
+    except Exception as e:
+        print(f"Error waiting for table: {e}")
+        driver.quit()
+        return jsonify({"data":[]})
+    
     page = driver.page_source
     soup = BeautifulSoup(page, "html.parser")
-    
 
-    verifiedName = 0
-    # Test if player name is invalid
-    if verifiedName == 0:
-        error404 = soup.find("div", class_="content content--error")
-        try:
-            test = error404.text
-            print("Invalid player name...")
-            return " "
-        except AttributeError:
-            print("Valid player name. Searching for rank information...")
-            verifiedName = 1
-
-    # Finds information of 1v1 rank
-    mmr = soup.find("table", class_="trn-table")
-    duelindex = ""
+    # Check if player is error
     try:
-        duelIndex = mmr.text.find("Duel")
+        error = soup.find("div", class_="content content--error")
+        error.text
+        return jsonify({"data":[]})
     except AttributeError:
-        print("Blah")
-        driver.quit()
-    duelInformation = ""
-    for character in mmr.text[duelIndex::]:
-        if character != "#":
-            duelInformation = duelInformation + character
-        else:
-            break
+        # No error
+        ranks = ""
 
-    # Finds information of 2v2 rank
-    doublesIndex = mmr.text.find("Doubles")
-    doublesInformation = ""
-    for character in mmr.text[doublesIndex::]:
-        if character != "#":
-            doublesInformation = doublesInformation + character
-        else:
-            break
-    
-    # Finds information of 3v3 rank
-    standardIndex = mmr.text.find("Standard")
-    standardInformation = ""
-    for character in mmr.text[standardIndex::]:
-        if character != "#":
-            standardInformation = standardInformation + character
-        else:
-            break
-
-    infoArray = [duelInformation, doublesInformation, standardInformation]
-    print("Done!")
+    ranks = soup.findAll("div", class_="mmr")
+    mmr = []
+    for rank in ranks:
+        mmr.append(rank.text)
     driver.quit()
-    return jsonify({'data':infoArray})
+    return jsonify({'data':mmr})
 
 if __name__ == '__main__':
     app.run(debug=True)

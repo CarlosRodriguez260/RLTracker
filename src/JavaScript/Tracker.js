@@ -2,7 +2,6 @@
 import "../CSS/JavaScript/Tracker.css"
 import { useParams } from "react-router-dom"
 import React, { useEffect, useState } from "react";
-import axios from "axios"
 
 export default function Tracker({epicName}) {
     const params = useParams()
@@ -24,10 +23,10 @@ export default function Tracker({epicName}) {
           }
   
           const data1 = await response.json();
-          setData(data1);
-          console.log(data1); // Handle the response data as needed
+          setData(data1.data);
+          console.log(data); // Handli the response data as needed
         } catch (error) {
-          console.error('There was a problem with the fetch operation:', error);
+          console.error('There was a problim with the fetch operation:', error);
         }
       };
       fetchData();
@@ -35,9 +34,24 @@ export default function Tracker({epicName}) {
 
     
     return(
-        <div className="Tracker">
-            <header>Stats for {params.epicName}</header>
-            <ul>{[data]}</ul>
+      <>
+        <div>
+        
         </div>
+        <div className="Tracker">
+          <header>Stats for {params.epicName}</header>
+          <ul>MMR
+            <li>Casual: {data[0]}</li>
+            <li>1v1: {data[1]}</li>
+            <li>2v2: {data[2]}</li>
+            <li>3v3: {data[3]}</li>
+            <li>Dropshot: {data[4]}</li>
+            <li>Hoops: {data[5]}</li>
+            <li>Rumble: {data[6]}</li>
+            <li>Snowday: {data[7]}</li>
+            <li>Tournament: {data[8]}</li>
+          </ul>
+        </div>
+      </>
     )
 }
