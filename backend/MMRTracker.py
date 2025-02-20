@@ -4,7 +4,7 @@ import requests
 import schedule
 import time
 from flask import Flask, jsonify, request
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS  
 from selenium.webdriver.chrome.options import Options
 import os
 
@@ -21,9 +21,10 @@ def get_ranks():
     driver = webdriver.Chrome(options=options)
     driver.minimize_window()
     driver.get(url)
+    time.sleep(7)
     page = driver.page_source
     soup = BeautifulSoup(page, "html.parser")
-    time.sleep(10)
+    
 
     verifiedName = 0
     # Test if player name is invalid
@@ -38,14 +39,13 @@ def get_ranks():
             verifiedName = 1
 
     # Finds information of 1v1 rank
-    try:
-        test = soup.find("table", class_="trn-table")
-        p = test.text
-    except AttributeError:
-        driver.quit()
-        get_ranks()
     mmr = soup.find("table", class_="trn-table")
-    duelIndex = mmr.text.find("Duel")
+    duelindex = ""
+    try:
+        duelIndex = mmr.text.find("Duel")
+    except AttributeError:
+        print("Blah")
+        driver.quit()
     duelInformation = ""
     for character in mmr.text[duelIndex::]:
         if character != "#":
@@ -72,6 +72,7 @@ def get_ranks():
             break
 
     infoArray = [duelInformation, doublesInformation, standardInformation]
+    print("Done!")
     driver.quit()
     return jsonify({'data':infoArray})
 
