@@ -5,6 +5,8 @@ import schedule
 import time
 from flask import Flask, jsonify, request
 from flask_cors import CORS  # Import CORS
+from selenium.webdriver.chrome.options import Options
+import os
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
@@ -13,13 +15,17 @@ CORS(app, origins=["http://localhost:3000"])
 def get_ranks():
     data = request.json
     url = data.get('url')
-    driver = webdriver.Chrome()
+    print(url)
+    options = Options()
+    options.add_argument("--no-sandbox")
+    driver = webdriver.Chrome(options=options)
     driver.minimize_window()
     driver.get(url)
     page = driver.page_source
     soup = BeautifulSoup(page, "html.parser")
-    time.sleep(5)
+    time.sleep(10)
 
+    verifiedName = 0
     # Test if player name is invalid
     if verifiedName == 0:
         error404 = soup.find("div", class_="content content--error")
@@ -37,6 +43,7 @@ def get_ranks():
         p = test.text
     except AttributeError:
         driver.quit()
+        get_ranks()
     mmr = soup.find("table", class_="trn-table")
     duelIndex = mmr.text.find("Duel")
     duelInformation = ""
