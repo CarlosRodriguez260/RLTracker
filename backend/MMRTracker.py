@@ -9,7 +9,7 @@ from flask_cors import CORS
 from selenium.webdriver.chrome.options import Options
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["*"])
 @app.route('/scrape', methods=['POST'])
 
 def get_ranks():
@@ -44,11 +44,15 @@ def get_ranks():
         ranks = ""
 
     ranks = soup.findAll("div", class_="mmr")
+    names = soup.findAll("div", class_="playlist")
     mmr = []
+    playlist = []
     for rank in ranks:
         mmr.append(rank.text)
+    for name in names:
+        playlist.append(name.text)
     driver.quit()
-    return jsonify({'data':mmr})
+    return jsonify({'data':mmr, 'playlist':playlist})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
