@@ -72,5 +72,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ## Aditional Details
 For running backend, the following is required from pip:
 - flask
+- flask_cors
 - selenium
 - bs4
+This can be done quickly by running the following command in the `backend` folder
+### `pip install -r requirements.txt`
