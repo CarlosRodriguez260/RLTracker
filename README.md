@@ -75,5 +75,5 @@ For running backend, the following is required from pip:
 - flask_cors
 - selenium
 - bs4
-This can be done quickly by running the following command in the `backend` folder
+# This can be done quickly by running the following command in the `backend` folder
 ### `pip install -r requirements.txt`
