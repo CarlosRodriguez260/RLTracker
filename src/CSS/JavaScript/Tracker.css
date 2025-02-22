@@ -1,7 +1,7 @@
 .Loader
 {
     color: white;
-    font-family:'Times New Roman', Times, serif;
+    font-family:Georgia, 'Times New Roman', Times, serif;
     font-size: 20px;
     background-image: url("/public/rlbackground.jpg");
     background-size: cover;
@@ -26,8 +26,8 @@
 .Tracker
 {
     color:white;
-    font-family:'Times New Roman', Times, serif;
-    font-size: 20px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
     background-image: url("/public/rlbackground.jpg");
     background-size: cover;
     position:fixed;
@@ -36,4 +36,18 @@
     text-align: center;
     background-color: rgba(0,0,0,0.5);
     background-blend-mode: overlay;
+
+  .h1
+  {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.Boxes
+{
+    display: flex;
+    justify-content: center;
+    gap: 1vw;
+    padding: 20px;
 }

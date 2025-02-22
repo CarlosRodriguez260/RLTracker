@@ -46,10 +46,12 @@ def get_ranks():
     data = soup.find_all("div", class_="mmr")
     names = soup.find_all("div", class_="playlist")
     ranks = soup.find_all("td", class_="name")
+    pictures = soup.find_all("td", class_="icon-container")
 
     mmr = []
     playlist = []
     rank = []
+    picture = []
     for value in data:
         mmr.append(value.text)
     for value in names:
@@ -60,10 +62,15 @@ def get_ranks():
             rank.append(temp.text)
         except AttributeError:
             continue
+    for value in pictures:
+        try:
+            temp = value.find("img", class_="icon")
+            picture.append(temp.get("src"))
+        except AttributeError:
+            continue
     
     driver.quit()
-    print(rank)
-    return jsonify({'data':mmr, 'playlist':playlist, 'rank':rank})
+    return jsonify({'data':mmr, 'playlist':playlist, 'rank':rank, 'picture':picture})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
