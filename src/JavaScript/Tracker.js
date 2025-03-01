@@ -18,7 +18,7 @@ export default function Tracker({epicName}) {
       const fetchData = async () => {
         try {
           // The IP here depends on the computer hosting the backend
-          const response = await fetch('http://192.168.68.52:5000/scrape', {
+          const response = await fetch('http://192.168.68.50:5000/scrape', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
