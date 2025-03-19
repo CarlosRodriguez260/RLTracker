@@ -1,0 +1,12 @@
+.Container
+{
+    border-radius:10px;
+    padding: 0 15px;
+    box-shadow: 0px 0px 20px #ffffff;
+}
+
+.Pic
+{
+    width: 7vw;
+}
+

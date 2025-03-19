@@ -7,11 +7,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from flask import Flask, jsonify, request
 from flask_cors import CORS  
 from selenium.webdriver.chrome.options import Options
+import requests
+import json
 
 app = Flask(__name__)
-CORS(app, origins=["*"])
-@app.route('/scrape', methods=['POST'])
+CORS(app,origins=["*"])
 
+@app.route('/scrape', methods=['POST'])
 def get_ranks():
     data = request.json
     url = data.get('url')
@@ -73,6 +75,63 @@ def get_ranks():
     
     driver.quit()
     return jsonify({'data':mmr, 'playlist':playlist, 'rank':rank, 'picture':picture})
+
+@app.route('/api/chat', methods=['POST'])
+def chat_ai():
+
+    # Code for talking to OpenAI models
+    # try:
+    #     print("First step")
+    #     data = request.json
+    #     message = data.get("message", "")
+        
+    #     print("Second step")
+    #     response = requests.post(
+    #         "https://api.openai.com/v1/chat/completions",
+    #         headers={"Authorization": f"Bearer {OPENAI_API_KEY}", "Content-Type": "application/json"},
+    #         json={"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": message}]}
+    #     )
+
+    #     print("Third step")
+    #     print(response.status_code, response.text)  # Debug API response
+    #     response_json = response.json()
+    #     reply = response_json["choices"][0]["message"]["content"]
+
+    #     print(reply)
+    #     return jsonify({"reply":reply})
+
+    # except Exception as e:
+    #     return jsonify({"error": str(e)}), 500
+
+    # Code for talking to local AI models hosted with ollama
+    try:
+        data = request.json
+        message = data.get("query","")
+        model = "llama3.2"
+        context = [] # Stores conversation history
+
+        response = requests.post(
+            "http://localhost:11434/api/generate",
+            json={
+                'model':model,
+                'prompt':message,
+                'context':context,
+            })
+        response.raise_for_status()
+
+        print("Llama3.2 responded!")
+        print("Response Status Code:", response.status_code)
+
+        reply = ""
+        for line in response.iter_lines():
+            body = json.loads(line)
+            reply = reply + body.get('response','')
+
+        return jsonify({'reply':reply})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

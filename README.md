@@ -72,11 +72,21 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ## Aditional Details
 For now, the program works with devices only in the *same* network
 
-For running backend, the following is required from pip:
+For running backend data scraper for RL, the following is required from pip:
 - flask
 - flask_cors
 - selenium
 - bs4
 
-This can be done quickly by running the following command in the `backend` folder
+For running querys with the LLM, the following is required from pip:
+- flask
+- flask_cors
+- requests
+
+Ollama needs to be downloaded locally. Afterwards, run this command on a CLI to pull the LLM:
+### `ollama run llama3.2:1b`
+
+Once the image is pulled, ollama should be running it in the background.
+
+The pip requirements can be installed quickly by running the following command in the `backend` folder
 ### `pip install -r requirements.txt`
