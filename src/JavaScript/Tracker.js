@@ -14,11 +14,12 @@ export default function Tracker({epicName}) {
     const [ranks, setRanks] = useState([])
     const [pictures, setPictures] = useState([])
     const [dataEmpty, setDataEmpty] = useState(false)
+
     useEffect(() => {
       const fetchData = async () => {
         try {
           // The IP here depends on the computer hosting the backend
-          const response = await fetch('http://192.168.68.50:5000/scrape', {
+          const response = await fetch('http://192.168.68.51:5000/scrape', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ export default function Tracker({epicName}) {
 
             <div className="Boxes">
               <Box data={data[7]} playlist={playlists[7]} rank={ranks[6]} picture={pictures[7]}/>
-              <Box data={data[8]} playlist={playlists[8]} rank={ranks[7]} picture={pictures[8]}/>
+              {/* <Box data={data[8]} playlist={playlists[8]} rank={ranks[7]} picture={pictures[8]}/> */}
             </div>
           </div>
         )}
