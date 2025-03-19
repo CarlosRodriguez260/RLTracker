@@ -127,7 +127,6 @@ def chat_ai():
         reply = ""
         for line in response.iter_lines():
             body = json.loads(line)
-            print(body)
 
             if body.get('done',True):
                 context = body["context"]
