@@ -10,6 +10,7 @@ from selenium.webdriver.chrome.options import Options
 import requests
 import json
 
+context = [] # Stores conversation history
 app = Flask(__name__)
 CORS(app,origins=["*"])
 
@@ -104,11 +105,12 @@ def chat_ai():
     #     return jsonify({"error": str(e)}), 500
 
     # Code for talking to local AI models hosted with ollama
+
     try:
+        global context
         data = request.json
         message = data.get("query","")
         model = "llama3.2"
-        context = [] # Stores conversation history
 
         response = requests.post(
             "http://localhost:11434/api/generate",
@@ -125,9 +127,12 @@ def chat_ai():
         reply = ""
         for line in response.iter_lines():
             body = json.loads(line)
-            reply = reply + body.get('response','')
+            print(body)
 
-        return jsonify({'reply':reply})
+            if body.get('done',True):
+                context = body["context"]
+                return jsonify({'reply':reply})
+            reply += body.get('response','')
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
