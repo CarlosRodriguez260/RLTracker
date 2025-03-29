@@ -73,7 +73,7 @@ export default function Tracker({epicName}) {
 
             <div className="Boxes">
               <Box data={data[7]} playlist={playlists[7]} rank={ranks[6]} picture={pictures[7]}/>
-              {/* <Box data={data[8]} playlist={playlists[8]} rank={ranks[7]} picture={pictures[8]}/> */}
+              <Box data={data[8]} playlist={playlists[8]} rank={ranks[7]} picture={pictures[8]}/>
             </div>
           </div>
         )}
